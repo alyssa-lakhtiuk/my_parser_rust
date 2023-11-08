@@ -1,6 +1,12 @@
+use pest::Parser;
+use anyhow::anyhow;
 use my_parser_Lakhtiuk::*;
-  
-pub fn main() {
-    assert_eq!(list_parser::list("[1,1,2,3,5,8]"), Ok(vec![1, 1, 2, 3, 5, 8]));
-    println!("{:?}", list_parser::list("[1,2,3,4,5,945]"))
+
+fn main() -> anyhow::Result< () > {
+    let got = Grammar::parse(Rule::full_yaml, "{ghj:45}")?;
+    println!("{:?}", got);
+
+    let file_path = String::from("./test_files/first_test_file.txt");
+    read_file(file_path);
+    Ok(())
 }

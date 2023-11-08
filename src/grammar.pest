@@ -1,0 +1,2 @@
+full_yaml = {"---" ~ whitespace* ~ASCII_ALPHANUMERIC* ~ ":" ~ (ASCII ~ ANY)* ~ whitespace*}
+whitespace = _{ " " | "\t" | "\r" | "\n" }
