@@ -2,7 +2,7 @@
 name = "my_parser_Lakhtiuk"
 version = "0.1.0"
 edition = "2021"
-description = "Parser for educational project"
+description = "YAML parser for educational project"
 license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
