@@ -9,7 +9,7 @@ Simple and strict YAML format parser written with Rust usint pest crate.
 
 ! Unit Tests: Implement unit tests for the parser; these can be placed in a separate file within the tests directory. +
 
-! Test Coverage: Ensure each grammar rule is covered by at least one unit test.
+! Test Coverage: Ensure each grammar rule is covered by at least one unit test.+
 
 ! Core Files: The project must include lib.rs and main.rs files. +
 
@@ -68,12 +68,19 @@ valid simple yaml file, yellow - subnode
 
 
 ### Usage
-Now you can run this program by simply entering ```cargo run``` or run tests with ```cargo test```. Later more advanced features will be added. 
+```
+/target/debug/simple_yaml_parser <filepath-to-parse>
+```
+```
+/target/debug/simple_yaml_parser --help
+```
 
 ## Code flow 
 lib.rs imports all necessary tools and contains function that can be used to read data from file. 
 main.rs imports everything (from lib.rs file especially) and then proceeds to the main funciton. 
 tests are placed into tests folder. Grammar tests can be found in the file named grammar_tests.rs
+Reads data from file given by user -> passes this data to parser function -> serializes parsed data into new a little bit modified content
+(serializied data doesn't contain dashes) 
 
 ## Rules description
 The first defined rule full_yaml determines whether the input file may contain the valid yaml structure by checking if it starts with ---. Later I will create another rules for every substructures of yaml and combine them in this rule. 

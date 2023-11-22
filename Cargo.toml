@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "Simple YAML parser for educational project"
 license = "MIT"
+author = "Alisa Lakhtiuk"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

@@ -1,6 +1,22 @@
 use pest::Parser;
 use anyhow::anyhow;
-use simple_yaml_parser_kma::*;
+pub use simple_yaml_parser_kma::*;
+
+#[test]
+fn serialization_test() {
+    assert_eq!(parse_yaml_file("---\na: b\n...").unwrap(), YAMLValue::Object(vec![("a", YAMLValue::String("b"))]));
+    assert_eq!(
+        parse_yaml_file("---\nkey: value\nnum: 100\nnull: null\nbool: false\narr: \n  a1: 11.0\n  b1: 12.0\n...").unwrap(),
+        YAMLValue::Object(vec![
+            ("key", YAMLValue::String("value")),
+            ("num", YAMLValue::Number(100.0)),
+            ("null", YAMLValue::Null),
+            ("bool", YAMLValue::Boolean(false)),
+            ("arr", YAMLValue::Array(vec![YAMLValue::Object(vec![("a1", YAMLValue::Number(11.0))]), YAMLValue::Object(vec![("b1", YAMLValue::Number(12.0))])]))
+        ])
+    );
+    assert!(parse_yaml_file("{el:1,}").is_err());
+}
 
 #[test]
 fn basic_test() -> anyhow::Result< () > {
@@ -203,3 +219,4 @@ fn intennd_rule_test() -> anyhow::Result< () > {
 
     Ok(())
 }
+

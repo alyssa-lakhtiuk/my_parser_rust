@@ -7,6 +7,7 @@ use std::fs;
 #[grammar = "./grammar.pest"]
 pub struct Grammar;
 
+#[derive(PartialEq, Debug)]
 pub enum YAMLValue<'a> {
   Object(Vec<(&'a str, YAMLValue<'a>)>),
   Array(Vec<YAMLValue<'a>>),
@@ -18,8 +19,6 @@ pub enum YAMLValue<'a> {
 
 pub fn serialize_yamlvalue(val: &YAMLValue) -> String {
   use YAMLValue::*;
-  use std::string::String;
-  let indentation = String::from("  ");
   match val {
       Object(o) => {
           let contents: Vec<_> = o
@@ -46,7 +45,6 @@ pub fn read_file(file_path: &str) -> String {
   let contents = fs::read_to_string(file_path)
       .expect("Should have been able to read the file");
 
-  // println!("File data:\n{contents}");
   contents
 }
 
@@ -58,7 +56,6 @@ pub fn parse_yaml_file(file: &str) -> Result<YAMLValue, Error<Rule>> {
   use pest::iterators::Pair;
 
   fn parse_value(pair: Pair<Rule>) -> YAMLValue {
-    println!("{:?}", pair);
       match pair.as_rule() {
           Rule::object => YAMLValue::Object(
               pair.into_inner()
