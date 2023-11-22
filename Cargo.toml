@@ -1,14 +1,15 @@
 [package]
-name = "my_parser_Lakhtiuk"
+name = "simple_yaml_parser_kma"
 version = "0.1.0"
 edition = "2021"
-description = "YAML parser for educational project"
+description = "Simple YAML parser for educational project"
 license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 anyhow = "1.0.75"
+clap = { version = "4.4.8", features = ["derive"] }
 peg = "0.8.2"
 pest = "2.7.5"
 pest_derive = "2.7.5"

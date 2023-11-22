@@ -1,2 +1,15 @@
-full_yaml = {"---" ~ whitespace* ~ASCII_ALPHANUMERIC* ~ ":" ~ (ASCII ~ ANY)* ~ whitespace*}
-whitespace = _{ " " | "\t" | "\r" | "\n" }
+full_yaml    =  _{ SOI ~ "---"? ~ line_end* ~ object ~line_end* ~ "..."? ~ line_end* ~ EOI }
+object       =  { key_value+ }
+helpnode = {key_value}
+subnode      =  { (indent+ ~ "-"? ~ " "* ~ helpnode)+ }
+key_value    =  { string ~ ":" ~ " "? ~ value }
+value        = _{ ("\n" ~ subnode)+ | scalar }
+scalar       = _{ number ~("\n"|EOI)| boolean~("\n"|EOI) | null~("\n"|EOI) | string~"\n" }
+number       = @{
+    "-"? ~ ("0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*) ~ ("." ~ ASCII_DIGIT*)? ~ (^"e" ~ ("+" | "-")? ~ ASCII_DIGIT+)?
+}
+boolean      =  { "true" | "false" }
+null         =  { "null" }
+string       = @{ (ASCII_ALPHANUMERIC+ ~ "-"? ~ ASCII_ALPHANUMERIC*) }
+line_end     = _{ "\n\r" | "\n" | "\r" }
+indent       = _{ " "{2} }
