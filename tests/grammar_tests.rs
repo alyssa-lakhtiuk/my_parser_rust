@@ -79,36 +79,127 @@ fn subnode_rule_test() -> anyhow::Result< () > {
 
 #[test]
 fn key_value_rule_test() -> anyhow::Result< () > { 
+    let correct = "a: 1\n";
+    let pair = Grammar::parse(Rule::key_value, "a: 1\n11111")?.next().ok_or_else( || anyhow!( "no pair" ) )?;
+    assert_eq!( pair.as_str(), correct);
+    assert_eq!( pair.as_span().start(), 0 );
+    assert_eq!( pair.as_span().end(), 5 );
+
+    let pair = Grammar::parse(Rule::key_value, "");
+    assert!(pair.is_err());
+
+    let pair = Grammar::parse(Rule::key_value, "{anything here}");
+    assert!(pair.is_err());
+
     Ok(())
 }
 
 #[test]
 fn value_rule_test() -> anyhow::Result< () > { 
+    let correct = "  a: 1\n  b: 2\n";
+    let pair = Grammar::parse(Rule::value, "\n  a: 1\n  b: 2\n")?.next().ok_or_else( || anyhow!( "no pair" ) )?;
+    assert_eq!( pair.as_str(), correct);
+    assert_eq!( pair.as_span().start(), 1 );
+    assert_eq!( pair.as_span().end(), 15 );
+
+    let pair = Grammar::parse(Rule::value, "\n\n\n");
+    assert!(pair.is_err());
+
     Ok(())
 }
 
 #[test]
 fn scalar_rule_test() -> anyhow::Result< () > { 
+    let correct = "anything";
+    let pair = Grammar::parse(Rule::scalar, "anything\n")?.next().ok_or_else( || anyhow!( "no pair" ) )?;
+    assert_eq!( pair.as_str(), correct);
+    assert_eq!( pair.as_span().start(), 0 );
+    assert_eq!( pair.as_span().end(), 8 );
+
+    let pair = Grammar::parse(Rule::value, " ");
+    assert!(pair.is_err());
+
     Ok(())
 }
 
 #[test]
 fn number_rule_test() -> anyhow::Result< () > { 
+    let correct = "75";
+    let pair = Grammar::parse(Rule::number, "75\n")?.next().ok_or_else( || anyhow!( "no pair" ) )?;
+    assert_eq!( pair.as_str(), correct);
+    assert_eq!( pair.as_span().start(), 0 );
+    assert_eq!( pair.as_span().end(), 2 );
+
+    let pair = Grammar::parse(Rule::number, "str");
+    assert!(pair.is_err());
+
+
     Ok(())
 }
 
 #[test]
 fn boolean_rule_test() -> anyhow::Result< () > { 
+    let correct = "true";
+    let pair = Grammar::parse(Rule::boolean, "true")?.next().ok_or_else( || anyhow!( "no pair" ) )?;
+    assert_eq!( pair.as_str(), correct);
+
+    let correct = "false";
+    let pair = Grammar::parse(Rule::boolean, "false")?.next().ok_or_else( || anyhow!( "no pair" ) )?;
+    assert_eq!( pair.as_str(), correct);
+
+    let pair = Grammar::parse(Rule::boolean, "str");
+    assert!(pair.is_err());
     Ok(())
 }
 
 #[test]
 fn null_rule_test() -> anyhow::Result< () > { 
+    let correct = "null";
+    let pair = Grammar::parse(Rule::null, "null")?.next().ok_or_else( || anyhow!( "no pair" ) )?;
+    assert_eq!( pair.as_str(), correct);
+
+    let pair = Grammar::parse(Rule::null, "str");
+    assert!(pair.is_err());
     Ok(())
 }
 
 
 #[test]
 fn string_rule_test() -> anyhow::Result< () > { 
+    let correct = "str123";
+    let pair = Grammar::parse(Rule::string, "str123")?;
+    assert_eq!( pair.as_str(), correct);
+
+    let correct = "str";
+    let pair = Grammar::parse(Rule::string, "str 123")?;
+    assert_eq!( pair.as_str(), correct);
+
+    let pair = Grammar::parse(Rule::string, "[123]");
+    assert!(pair.is_err());
+
+    Ok(())
+}
+
+#[test]
+fn line_end_rule_test() -> anyhow::Result< () > { 
+    let correct = "";
+    let pair = Grammar::parse(Rule::line_end, "\n\r123")?;
+    assert_eq!( pair.as_str(), correct);
+
+    let pair = Grammar::parse(Rule::line_end, "[123]");
+    assert!(pair.is_err());
+
+    Ok(())
+}
+
+#[test]
+fn intennd_rule_test() -> anyhow::Result< () > { 
+    let correct = "";
+    let pair = Grammar::parse(Rule::indent, "  ")?;
+    assert_eq!( pair.as_str(), correct);
+
+    let pair = Grammar::parse(Rule::indent, "[123]");
+    assert!(pair.is_err());
+
     Ok(())
 }
