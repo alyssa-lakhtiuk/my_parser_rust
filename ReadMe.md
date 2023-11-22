@@ -65,7 +65,7 @@ This parser works with yaml files with a strict structure:
 valid simple yaml file, yellow - subnode
 
 ### Link to crates.io
-
+https://crates.io/crates/simple_yaml_parser_kma
 
 ### Usage
 ```
